@@ -1,43 +1,78 @@
-import modelo
-import controlador
+from controlador import ControladorRRHH
 
-while True:
-    #login
-    usuario = False
-    while usuario == False:
-        username = input("Ingrese su usuario: ")
-        password = input("Ingrese su contraseña: ")
-        usuario = controlador.validar_usuario(username, password)
+def menu():
+    print("\n--- Sistema de Gestión RRHH ---")
+    print("1. Crear empleado")
+    print("2. Ver empleado")
+    print("3. Actualizar empleado")
+    print("4. Eliminar empleado")
+    print("5. Crear departamento")
+    print("6. Crear proyecto")
+    print("7. Registrar horas")
+    print("8. Generar informe")
+    print("0. Salir")
 
-    print("Hola", username)
-    if usuario.tipo_usuario == "administrador": #si se logea como admin
-        menu = print("""Qué desea gestionar?
-1. Empleado
-2. Departamento
-3. Proyecto""")
-        opcion = input("ingrese una opcion: ")
-        if opcion == "1":   #si elige empleado
-            menu = ("""qué desea hacer?
-1. Agregar empleado
-2. Actualizar empleado
-3. Eliminar empleado
-4. Generar informe""")
-            opcion = input("ingrese una opcion: ")
-            if opcion == "1": #si elige agregar empleado
-                controlador.agregar_empleado(usuario)
-                print("Empleado agregado con éxito")
-            if opcion == "2": #si elige actualizar empleado
-                pass
-            if opcion == "3": #si elige eliminar empleado
-                pass
-            if opcion == "4": #si elige generar informe
-                pass
+if __name__ == "__main__":
+    controlador = ControladorRRHH()
+    opcion = -1
 
-        elif opcion == "2": #si elige departamento
-            pass
-        elif opcion == "3": # si elige proyecto
-            pass
+    while opcion != 0:
+        menu()
+        try:
+            opcion = int(input("Seleccione una opción: "))
+        except ValueError:
+            print("Debe ingresar un número válido.")
+            continue
 
-    elif usuario.tipo_usuario == "comun": #si se logea como usuario comun
-        menu = print("""Qué desea hacer?
-1. Registrar horas""")
+        if opcion == 1:
+            nombre = input("Nombre: ")
+            direccion = input("Dirección: ")
+            telefono = input("Teléfono: ")
+            email = input("Email: ")
+            fecha = input("Fecha inicio contrato (YYYY-MM-DD): ")
+            salario = float(input("Salario: "))
+            controlador.crear_empleado(nombre, direccion, telefono, email, fecha, salario)
+
+        elif opcion == 2:
+            id_empleado = int(input("ID empleado: "))
+            controlador.ver_empleado(id_empleado)
+
+        elif opcion == 3:
+            id_empleado = int(input("ID empleado: "))
+            nombre = input("Nombre: ")
+            direccion = input("Dirección: ")
+            telefono = input("Teléfono: ")
+            email = input("Email: ")
+            fecha = input("Fecha inicio contrato (YYYY-MM-DD): ")
+            salario = float(input("Salario: "))
+            controlador.actualizar_empleado(id_empleado, nombre, direccion, telefono, email, fecha, salario)
+
+        elif opcion == 4:
+            id_empleado = int(input("ID empleado: "))
+            controlador.eliminar_empleado(id_empleado)
+
+        elif opcion == 5:
+            nombre = input("Nombre departamento: ")
+            controlador.crear_departamento(nombre)
+
+        elif opcion == 6:
+            nombre = input("Nombre proyecto: ")
+            descripcion = input("Descripción: ")
+            fecha = input("Fecha inicio (YYYY-MM-DD): ")
+            controlador.crear_proyecto(nombre, descripcion, fecha)
+
+        elif opcion == 7:
+            fecha = input("Fecha (YYYY-MM-DD): ")
+            horas = float(input("Horas trabajadas: "))
+            descripcion = input("Descripción tarea: ")
+            proyecto = input("Proyecto: ")
+            controlador.registrar_horas(fecha, horas, descripcion, proyecto)
+
+        elif opcion == 8:
+            tabla = input("Tabla para informe (empleado/departamento/proyecto): ")
+            controlador.generar_informe(tabla)
+
+        elif opcion == 0:
+            print("Saliendo del sistema...")
+        else:
+            print("Opción no válida.")
